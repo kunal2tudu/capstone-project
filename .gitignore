@@ -1,0 +1,12 @@
+# Temporary Office lock files
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Root duplicate docx (permanent copy is in docs/reports/)
+/Land Stack - Report 1 - Full-Stack Frontend GIS and Citizen Portal.docx

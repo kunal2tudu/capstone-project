@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Land Stack 3D | Integrated GIS-Based Digital Public Infrastructure</title>
+  <meta name="description" content="Parcel-centric 3D GIS platform using ULPIN (Bhu-Aadhaar) to unify cadastral maps, Record of Rights, registration, property tax, and AI spatial alerts.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- MapLibre GL JS CSS -->
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <!-- Header / Nav -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">LAND STACK <span class="badge-3d">3D GIS</span></span>
+        <span class="brand-subtitle">Digital Public Infrastructure • Bhu-Aadhaar (ULPIN)</span>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="ulpin-search" placeholder="Search by ULPIN (e.g. IN-JH-8619-2272-004), Survey No, or Owner..." autocomplete="off">
+        <button id="clear-search" class="clear-btn" title="Clear">✕</button>
+      </div>
+      <div id="search-suggestions" class="search-suggestions hidden"></div>
+    </div>
+
+    <!-- Quick Action Controls -->
+    <div class="header-actions">
+      <button id="btn-earth-flyby" class="btn-primary" title="Replay Google Earth cinematic zoom from space">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+          <path d="M2 12h20"></path>
+        </svg>
+        <span>Earth Fly-In</span>
+      </button>
+
+      <div class="view-toggles">
+        <button id="btn-toggle-3d" class="btn-toggle active" title="Toggle 3D Pitch and Terrain Elevation">3D Tilt</button>
+        <button id="btn-toggle-extrusions" class="btn-toggle active" title="Toggle 3D Parcel Height Extrusion">3D Parcels</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="main-container">
+    <!-- Map Container -->
+    <div id="map" class="map-viewport"></div>
+
+    <!-- HUD Overlay Top-Right (Layers & Controls) -->
+    <aside class="gis-hud hud-top-right">
+      <div class="hud-card">
+        <div class="hud-header">
+          <div class="hud-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            <span>GIS Thematic Layers</span>
+          </div>
+          <span class="pulse-indicator" title="Live Synced"></span>
+        </div>
+
+        <div class="layer-list">
+          <label class="layer-item">
+            <input type="checkbox" id="layer-parcels" checked>
+            <span class="custom-chk"></span>
+            <span class="layer-label">Cadastral Boundaries (ULPIN)</span>
+            <span class="layer-color parcel-stroke"></span>
+          </label>
+
+          <label class="layer-item">
+            <input type="checkbox" id="layer-zoning" checked>
+            <span class="custom-chk"></span>
+            <span class="layer-label">Land Use & Master Plan Zoning</span>
+            <span class="layer-color zoning-color"></span>
+          </label>
+
+          <label class="layer-item">
+            <input type="checkbox" id="layer-ai-alerts" checked>
+            <span class="custom-chk"></span>
+            <span class="layer-label">AI Unauthorized Construction Alerts</span>
+            <span class="layer-color ai-color"></span>
+          </label>
+
+          <label class="layer-item">
+            <input type="checkbox" id="layer-utilities" checked>
+            <span class="custom-chk"></span>
+            <span class="layer-label">Utilities, Roads & Setback Buffers</span>
+            <span class="layer-color utility-color"></span>
+          </label>
+
+          <label class="layer-item">
+            <input type="checkbox" id="layer-disputes" checked>
+            <span class="custom-chk"></span>
+            <span class="layer-label">Disputed / Encumbered Parcels</span>
+            <span class="layer-color dispute-color"></span>
+          </label>
+        </div>
+
+        <div class="basemap-selector">
+          <div class="basemap-title">Basemap Provider</div>
+          <div class="basemap-options">
+            <button class="basemap-btn active" data-style="satellite">Satellite (Earth)</button>
+            <button class="basemap-btn" data-style="hybrid">Hybrid</button>
+            <button class="basemap-btn" data-style="dark">Dark DPI</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Camera Presets -->
+      <div class="hud-card location-presets">
+        <div class="hud-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+          </svg>
+          <span>Camera Navigation</span>
+        </div>
+        <div class="preset-buttons">
+          <button class="preset-btn active" data-preset="cadastre-zoom">📍 Focus Cadastre</button>
+          <button class="preset-btn" data-preset="orbit-view">🌐 360° Orbit View</button>
+          <button class="preset-btn" data-preset="space-view">🛰️ Space Orbit</button>
+          <button class="preset-btn" data-preset="top-down">📐 2D Cadastral Map</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Map Info Bar (Bottom-Left) -->
+    <div class="hud-telemetry">
+      <div class="telemetry-item">
+        <span class="tel-label">Coordinates:</span>
+        <span id="tel-coords" class="tel-value">86.1924° E, 22.7268° N</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="tel-label">Pitch / Bearing:</span>
+        <span id="tel-pitch" class="tel-value">60° / 35°</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="tel-label">Zoom Level:</span>
+        <span id="tel-zoom" class="tel-value">16.4</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="tel-label">TRL Level:</span>
+        <span class="tel-value badge-trl">TRL 4 Prototype</span>
+      </div>
+    </div>
+
+    <!-- Land Detail Side Inspector Drawer -->
+    <aside id="parcel-inspector" class="parcel-drawer closed">
+      <div class="drawer-header">
+        <div class="drawer-title-group">
+          <span class="drawer-tag">UNIFIED LAND PARCEL RECORD</span>
+          <h2 id="inspector-ulpin" class="ulpin-heading">Select a Parcel</h2>
+        </div>
+        <button id="close-drawer" class="btn-close" title="Close Panel">✕</button>
+      </div>
+
+      <div class="drawer-content">
+        <!-- Verification Banner -->
+        <div id="inspector-badge" class="verification-banner verified">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <div>
+            <div id="inspector-status-title" class="banner-title">Bhu-Aadhaar Verified Title</div>
+            <div id="inspector-status-sub" class="banner-sub">Clear title with no active injunctions</div>
+          </div>
+        </div>
+
+        <!-- 3D Actions -->
+        <div class="inspector-quick-actions">
+          <button id="btn-focus-parcel" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+            Fly to Parcel
+          </button>
+          <button id="btn-export-ror" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download RoR (7/12)
+          </button>
+        </div>
+
+        <!-- Section: Essential Spatial Attributes -->
+        <div class="inspector-section">
+          <h3 class="section-title">Spatial & Cadastral Attributes</h3>
+          <div class="data-grid">
+            <div class="data-item">
+              <span class="label">Survey / Khasra No.</span>
+              <span id="data-survey-no" class="val">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">Parcel Area</span>
+              <span id="data-area" class="val">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">Village / Tehsil</span>
+              <span id="data-village" class="val">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">District / State</span>
+              <span id="data-district" class="val">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">Current Land Use</span>
+              <span id="data-landuse" class="val highlight">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">Zoning Master Plan</span>
+              <span id="data-zoning" class="val">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Interoperable Department Records (Mock APIs) -->
+        <div class="inspector-section">
+          <h3 class="section-title">Connected Department Records</h3>
+
+          <!-- Revenue Accordion -->
+          <div class="dept-card">
+            <div class="dept-header">
+              <div class="dept-name">
+                <span class="dept-pill revenue">Revenue (RoR)</span>
+                <span>Ownership & Mutations</span>
+              </div>
+              <span id="dept-rev-badge" class="status-badge ok">Clean</span>
+            </div>
+            <div class="dept-body">
+              <div class="field-row"><span>Primary Owner:</span><strong id="data-owner">-</strong></div>
+              <div class="field-row"><span>Co-Owners:</span><span id="data-coowners">-</span></div>
+              <div class="field-row"><span>Last Mutation Date:</span><span id="data-mutation">-</span></div>
+            </div>
+          </div>
+
+          <!-- Registration Accordion -->
+          <div class="dept-card">
+            <div class="dept-header">
+              <div class="dept-name">
+                <span class="dept-pill reg">Registration</span>
+                <span>Deeds & Encumbrance</span>
+              </div>
+              <span id="dept-reg-badge" class="status-badge ok">No Lien</span>
+            </div>
+            <div class="dept-body">
+              <div class="field-row"><span>Registered Deed No:</span><span id="data-deed">-</span></div>
+              <div class="field-row"><span>Mortgage / Bank Lien:</span><span id="data-mortgage">-</span></div>
+            </div>
+          </div>
+
+          <!-- Municipal & Tax -->
+          <div class="dept-card">
+            <div class="dept-header">
+              <div class="dept-name">
+                <span class="dept-pill muni">Municipal & Tax</span>
+                <span>Permits & Assessment</span>
+              </div>
+              <span id="dept-tax-badge" class="status-badge ok">Paid</span>
+            </div>
+            <div class="dept-body">
+              <div class="field-row"><span>Property Tax Status:</span><span id="data-tax-status">-</span></div>
+              <div class="field-row"><span>Building Permit:</span><span id="data-permit">-</span></div>
+              <div class="field-row"><span>Max Permissible FAR:</span><span id="data-far">-</span></div>
+            </div>
+          </div>
+
+          <!-- AI Change Detection & Decision Support (Member 5) -->
+          <div id="ai-alert-card" class="dept-card ai-card">
+            <div class="dept-header">
+              <div class="dept-name">
+                <span class="dept-pill ai">AI Analytics</span>
+                <span>Satellite Change & Hazard</span>
+              </div>
+              <span id="dept-ai-badge" class="status-badge alert">Alert</span>
+            </div>
+            <div class="dept-body">
+              <div class="field-row"><span>Satellite Change Mask:</span><strong id="data-ai-change">-</strong></div>
+              <div class="field-row"><span>Permit Cross-Check:</span><span id="data-ai-permit">-</span></div>
+              <div class="field-row"><span>Spatial Risk Score:</span><span id="data-ai-risk">-</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audit Trail (Member 4 Security) -->
+        <div class="inspector-section">
+          <h3 class="section-title">Tamper-Evident Audit Log (DPI)</h3>
+          <div class="audit-stream">
+            <div class="audit-entry">
+              <div class="audit-dot"></div>
+              <div class="audit-detail">
+                <div class="audit-time">Just now</div>
+                <div class="audit-action">Citizen Query via Web GIS 3D Viewer</div>
+                <div class="audit-hash">Sha256: e8b9...41a3</div>
+              </div>
+            </div>
+            <div class="audit-entry">
+              <div class="audit-dot"></div>
+              <div class="audit-detail">
+                <div class="audit-time">3 days ago</div>
+                <div class="audit-action">Automated Satellite Sentinel-2 LULC Refresh</div>
+                <div class="audit-hash">Sha256: 34fc...881c</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Initial Space Flyby Intro Banner (Dismissible) -->
+    <div id="intro-toast" class="intro-toast">
+      <div class="intro-icon">🛰️</div>
+      <div class="intro-content">
+        <h4>Land Stack 3D Interactive Viewer</h4>
+        <p>Interactive 3D Cadastre built with MapLibre GL 3D. Click any land parcel to view unified records or click <strong>"Earth Fly-In"</strong> to replay the cinematic zoom from space!</p>
+      </div>
+      <button id="dismiss-toast" class="btn-dismiss">Got It</button>
+    </div>
+  </main>
+
+  <!-- MapLibre GL JS -->
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <!-- Application JS -->
+  <script src="assets/js/app.js?v=2"></script>
+</body>
+</html>
