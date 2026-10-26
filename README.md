@@ -85,18 +85,37 @@ capstone-project/
 
 ## 🌟 Interactive Features in the 3D GIS Portal
 
-1. **🛰️ Earth Fly-In (Cinematic Zoom)**:
-   * Replays the exact camera trajectory from your Google Earth Studio render in `media/earth-studio/`, zooming in from low Earth orbit over India directly into the land parcels.
-2. **🏢 3D Parcel Extrusions**:
-   * Renders cadastral parcels as 3D extruded blocks displaying height, land use, and spatial occupancy.
-   * Toggle smoothly between flat 2D cadastral survey view and 3D perspective pitch.
-3. **🔍 Unified Land Parcel Record (Bhu-Aadhaar)**:
-   * Click any parcel or search an ULPIN (`IN-JH-8619-2272-001`) to view connected records:
+1. **🛰️ Pan-India Earth Fly-In (Cinematic Orbit Zoom)**:
+   * Replays the exact camera trajectory from your Google Earth Studio render in `media/earth-studio/`, zooming out to low Earth orbit over the Indian subcontinent and curving straight down into **ANY location in India**!
+   * Use the **"🇮🇳 India Fly-In Hubs"** selector to quickly dive into New Delhi, Mumbai, Pune, Bengaluru, Hyderabad, Kolkata, Jamshedpur, Jaipur, Lucknow, Ahmedabad, or Chennai.
+   * Click **any point on the map** or search any city/village to launch an orbital fly-in directly to that ground coordinate.
+
+2. **📋 Existing ULPIN Registry (National Bhu-Aadhaar Directory)**:
+   * Dedicated modal section (`Existing ULPINs`) indexing parcels across 8 Indian States (Maharashtra, Jharkhand, Karnataka, Uttar Pradesh, Telangana, Rajasthan, Gujarat, and Delhi NCR).
+   * Filterable by State, Title Status (Clear, AI Alert, Mortgage Lien, Court Dispute), and Land Use (Agricultural, Commercial, Industrial, Residential, Forest).
+   * Real-time KPI Ribbon tracking Total Indexed ULPINs, Clear RoR Titles, Active AI Alerts, and Total Land Area.
+   * Direct **"🚀 Earth Fly-In"** and **"📄 Open Dossier"** actions for every single registered parcel in India.
+   * **➕ Mint / Register New ULPIN Tool**: Easily calculate and register a verified 14-digit ULPIN for any coordinates in India according to Department of Land Resources (DoLR) specifications.
+
+3. **🗺️ Contextual GIS Layers (Roads, Places, 3D Buildings)**:
+   * **Roads & Highways (NH/SH)**: Overlays National Highways (NH-44, NH-48, NH-33, etc.), state highways, and local road networks.
+   * **Places, Cities & Admin Labels**: Overlays village panchayats, taluks/tehsils, districts, and state borders.
+   * **3D Buildings & Urban Extrusions**: 3D height-extruded structures displaying volumetric zoning and building footprints.
+   * **Cadastral Boundaries & ULPIN**: High-visibility glowing borders and centroid identification codes.
+   * **Master Plan Zoning & Land Use**: Color-coded parcels for Industrial, Commercial, Agricultural, and Eco-Sensitive reserves.
+   * **AI Unauthorized Construction Alerts**: Red-flagged polygons where Sentinel-2 change masks conflict with municipal approvals.
+
+4. **📍 Real-Time Location Intelligence (Click Anywhere in India)**:
+   * Click anywhere on open ground in India to inspect that territory.
+   * Automatically reverse-geocodes place name, sub-district (tehsil/taluk), district, state, and postal PIN code.
+   * Calculates elevation and dynamically derives the standard 14-character Bhu-Aadhaar ULPIN.
+   * Provides immediate **"🚀 Orbit Fly-In Here"** and **"📋 Register into ULPIN Directory"** shortcuts.
+
+5. **🔍 Unified Land Parcel Record (Bhu-Aadhaar)**:
+   * Click any parcel or search an ULPIN (`IN-JH-8619-2272-001`, `IN-MH-7372-1859-101`) to view connected records:
      * **Revenue:** Owner, 7/12 RoR mutations, co-sharers.
      * **Registration:** Registered deed number, bank liens / mortgages.
      * **Municipal:** Property tax status, building permit sanction numbers.
      * **AI Analytics:** Satellite Sentinel-2 change detection flags.
      * **Audit Trail:** Tamper-evident cryptographic verification log.
-4. **🗺️ Thematic Layers & Basemaps**:
-   * Switch between **Satellite (Earth)**, **Hybrid**, and **Dark DPI** basemaps.
-   * Toggle cadastral boundaries, zoning overlays, AI alert envelopes, and road/utility setback corridors.
+

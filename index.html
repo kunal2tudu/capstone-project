@@ -49,7 +49,39 @@
 
     <!-- Quick Action Controls -->
     <div class="header-actions">
-      <button id="btn-earth-flyby" class="btn-primary" title="Replay Google Earth cinematic zoom from space">
+      <!-- Existing ULPIN Registry Button -->
+      <button id="btn-open-registry" class="btn-secondary" title="Open National Directory of Existing ULPINs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        <span>Existing ULPINs</span>
+        <span class="badge-count" id="registry-count-badge">15</span>
+      </button>
+
+      <!-- India Hubs Fly-In Dropdown -->
+      <div class="hub-select-container">
+        <select id="india-hub-select" class="hub-select" title="Execute Earth Fly-In to any Region in India">
+          <option value="">🇮🇳 Orbit Fly to Region...</option>
+          <option value="jamshedpur" selected>Jamshedpur (Jharkhand Cadastre)</option>
+          <option value="pune">Pune (Maharashtra Bhu-Naksha)</option>
+          <option value="mumbai">Mumbai (BKC / Financial Hub)</option>
+          <option value="delhi">New Delhi (National Capital)</option>
+          <option value="bengaluru">Bengaluru (Karnataka Bhoomi)</option>
+          <option value="hyderabad">Hyderabad (Telangana Dharani)</option>
+          <option value="kolkata">Kolkata (New Town / Bengal)</option>
+          <option value="jaipur">Jaipur (Rajasthan Apna Khata)</option>
+          <option value="lucknow">Lucknow (Uttar Pradesh Bhulekh)</option>
+          <option value="ahmedabad">Ahmedabad (GIFT City / Gujarat)</option>
+          <option value="chennai">Chennai (OMR Corridor)</option>
+        </select>
+      </div>
+
+      <!-- Universal Earth Fly-In -->
+      <button id="btn-earth-flyby" class="btn-primary" title="Cinematic Earth Fly-In from space orbit to current location">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"></circle>
           <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
@@ -84,6 +116,29 @@
         </div>
 
         <div class="layer-list">
+          <!-- Contextual Layers (Roads, Places, 3D Buildings) -->
+          <label class="layer-item">
+            <input type="checkbox" id="layer-roads" checked>
+            <span class="custom-chk"></span>
+            <span class="layer-label">Roads & National Highways (NH/SH)</span>
+            <span class="layer-color road-color"></span>
+          </label>
+
+          <label class="layer-item">
+            <input type="checkbox" id="layer-places" checked>
+            <span class="custom-chk"></span>
+            <span class="layer-label">Places, Cities & Admin Labels</span>
+            <span class="layer-color place-color"></span>
+          </label>
+
+          <label class="layer-item">
+            <input type="checkbox" id="layer-buildings" checked>
+            <span class="custom-chk"></span>
+            <span class="layer-label">3D Buildings & Urban Extrusions</span>
+            <span class="layer-color building-color"></span>
+          </label>
+
+          <!-- Land Governance Layers -->
           <label class="layer-item">
             <input type="checkbox" id="layer-parcels" checked>
             <span class="custom-chk"></span>
@@ -108,7 +163,7 @@
           <label class="layer-item">
             <input type="checkbox" id="layer-utilities" checked>
             <span class="custom-chk"></span>
-            <span class="layer-label">Utilities, Roads & Setback Buffers</span>
+            <span class="layer-label">Utilities, Setbacks & Power Grid</span>
             <span class="layer-color utility-color"></span>
           </label>
 
@@ -326,6 +381,242 @@
       </div>
     </aside>
 
+    <!-- Location Intelligence Drawer (Appears when clicking anywhere on India map) -->
+    <aside id="location-inspector" class="location-drawer closed">
+      <div class="drawer-header">
+        <div class="drawer-title-group">
+          <span class="drawer-tag">INDIA SPATIAL INTELLIGENCE</span>
+          <h2 id="loc-name" class="ulpin-heading">Location Details</h2>
+        </div>
+        <button id="close-loc-drawer" class="btn-close" title="Close Panel">✕</button>
+      </div>
+
+      <div class="drawer-content">
+        <div class="location-banner">
+          <div class="loc-badge-icon">📍</div>
+          <div>
+            <div id="loc-main-title" class="banner-title">Inspected Location</div>
+            <div id="loc-sub-title" class="banner-sub">Real-time cadastral and reverse-geocoded spatial intelligence</div>
+          </div>
+        </div>
+
+        <div class="inspector-quick-actions">
+          <button id="btn-loc-flyin" class="action-btn primary-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+            🚀 Orbit Fly-In Here
+          </button>
+          <button id="btn-loc-register" class="action-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            📋 Register into ULPIN Directory
+          </button>
+        </div>
+
+        <!-- Geographic Attributes -->
+        <div class="inspector-section">
+          <h3 class="section-title">Geographic & Administrative Hierarchy</h3>
+          <div class="data-grid">
+            <div class="data-item">
+              <span class="label">Village / Town / Locality</span>
+              <span id="loc-village" class="val highlight">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">Taluk / Tehsil</span>
+              <span id="loc-tehsil" class="val">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">District & State</span>
+              <span id="loc-district-state" class="val">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">Postal PIN Code</span>
+              <span id="loc-pincode" class="val">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">Coordinates (WGS-84)</span>
+              <span id="loc-coords" class="val font-mono">-</span>
+            </div>
+            <div class="data-item">
+              <span class="label">Estimated Elevation</span>
+              <span id="loc-elevation" class="val">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Computed Standard ULPIN -->
+        <div class="inspector-section">
+          <h3 class="section-title">Standard Bhu-Aadhaar ULPIN (DoLR Formula)</h3>
+          <div class="computed-ulpin-card">
+            <div class="ulpin-meta-tag">14-DIGIT UNIQUE PARCEL IDENTIFIER</div>
+            <div id="loc-computed-ulpin" class="computed-code">IN-XX-0000-0000-000</div>
+            <div class="computed-expl">Derived from 14-character geocoded bounding box centroid coordinates complying with Digital India Land Records Modernization Programme (DILRMP).</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Existing ULPIN Registry Modal Section -->
+    <div id="ulpin-registry-modal" class="registry-modal-backdrop hidden">
+      <div class="registry-modal-window">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <div class="modal-badge">BHU-AADHAAR NATIONAL DIRECTORY</div>
+            <h2 class="modal-title">Existing Land Parcels & ULPIN Registry</h2>
+            <p class="modal-sub">Unified Parcel Records Across Indian States with Direct 3D Earth Orbit Fly-In & RoR Inspection</p>
+          </div>
+          <button id="close-registry-modal" class="btn-close-modal" title="Close Registry">✕</button>
+        </div>
+
+        <!-- KPI Metrics Ribbon -->
+        <div class="registry-kpi-ribbon">
+          <div class="kpi-card">
+            <span class="kpi-num" id="kpi-total">15</span>
+            <span class="kpi-text">Total Indexed ULPINs</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-num ok" id="kpi-verified">10</span>
+            <span class="kpi-text">Clear Titles (RoR Clean)</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-num alert" id="kpi-alerts">2</span>
+            <span class="kpi-text">AI Construction Alerts</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-num info" id="kpi-area">86.4 Ha</span>
+            <span class="kpi-text">Total Land Area Indexed</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-num" id="kpi-states">8</span>
+            <span class="kpi-text">States Represented</span>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="registry-controls-bar">
+          <div class="filter-group">
+            <select id="filter-state" class="registry-select">
+              <option value="">All States (India)</option>
+              <option value="Jharkhand">Jharkhand</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+              <option value="Telangana">Telangana</option>
+              <option value="Rajasthan">Rajasthan</option>
+              <option value="Gujarat">Gujarat</option>
+              <option value="Delhi">Delhi NCR</option>
+            </select>
+
+            <select id="filter-status" class="registry-select">
+              <option value="">All Verification Statuses</option>
+              <option value="verified">Verified Clean Title</option>
+              <option value="unauthorized_alert">AI Construction Alert</option>
+              <option value="disputed">Court Injunction / Dispute</option>
+              <option value="government">Government / State Asset</option>
+            </select>
+
+            <select id="filter-landuse" class="registry-select">
+              <option value="">All Land Uses</option>
+              <option value="Agricultural">Agricultural</option>
+              <option value="Commercial">Commercial / Retail</option>
+              <option value="Industrial">Industrial</option>
+              <option value="Residential">Residential</option>
+              <option value="Forest">Green Belt / Forest</option>
+            </select>
+          </div>
+
+          <div class="search-filter-box">
+            <input type="text" id="filter-keyword" placeholder="Search by ULPIN, Owner, Survey No, Village...">
+          </div>
+        </div>
+
+        <!-- ULPIN Registry Table -->
+        <div class="registry-table-container">
+          <table class="registry-table">
+            <thead>
+              <tr>
+                <th>ULPIN (Bhu-Aadhaar)</th>
+                <th>Survey / Gat</th>
+                <th>Owner (Khatedar)</th>
+                <th>Village, District, State</th>
+                <th>Area</th>
+                <th>Land Classification</th>
+                <th>Title Status</th>
+                <th>3D Navigation</th>
+              </tr>
+            </thead>
+            <tbody id="registry-table-body">
+              <!-- Dynamically populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Registration Tool Drawer / Tab -->
+        <div class="registry-footer">
+          <div class="registry-footer-tip">
+            💡 <strong>Pro Tip:</strong> Click <strong>"🚀 Earth Fly-In"</strong> on any row to trigger an orbital camera descent from outer space down to that specific parcel in India!
+          </div>
+          <button id="btn-toggle-mint-form" class="btn-primary-sm">
+            <span>➕ Register / Mint New ULPIN</span>
+          </button>
+        </div>
+
+        <!-- Mint New ULPIN Inline Form (Collapsible) -->
+        <div id="mint-ulpin-panel" class="mint-panel hidden">
+          <div class="mint-header">
+            <h4>Register New Parcel & Generate Standard ULPIN</h4>
+            <span class="mint-sub">Complies with Department of Land Resources (DoLR) centroid geocoding standard</span>
+          </div>
+          <form id="form-mint-ulpin" class="mint-grid">
+            <div class="form-group">
+              <label>State</label>
+              <select id="mint-state" required>
+                <option value="Maharashtra">Maharashtra (MH)</option>
+                <option value="Jharkhand">Jharkhand (JH)</option>
+                <option value="Karnataka">Karnataka (KA)</option>
+                <option value="Uttar Pradesh">Uttar Pradesh (UP)</option>
+                <option value="Telangana">Telangana (TG)</option>
+                <option value="Rajasthan">Rajasthan (RJ)</option>
+                <option value="Gujarat">Gujarat (GJ)</option>
+                <option value="Delhi">Delhi (DL)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>District & Village</label>
+              <input type="text" id="mint-district" placeholder="e.g. Pune, Haveli" required>
+            </div>
+            <div class="form-group">
+              <label>Survey / Khasra / Gat No.</label>
+              <input type="text" id="mint-survey" placeholder="e.g. 142/3-B" required>
+            </div>
+            <div class="form-group">
+              <label>Owner (Khatedar) Name</label>
+              <input type="text" id="mint-owner" placeholder="e.g. Rajesh Patil & Co." required>
+            </div>
+            <div class="form-group">
+              <label>Coordinates (Lng, Lat)</label>
+              <input type="text" id="mint-coords" placeholder="e.g. 73.7180, 18.5910" required>
+            </div>
+            <div class="form-group">
+              <label>Area (Sqm / Acres)</label>
+              <input type="text" id="mint-area" placeholder="e.g. 5,200 m² (1.28 Acres)" required>
+            </div>
+            <div class="form-group">
+              <label>Land Use</label>
+              <select id="mint-landuse">
+                <option value="Agricultural">Agricultural</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Industrial">Industrial</option>
+                <option value="Residential">Residential</option>
+              </select>
+            </div>
+            <div class="form-group form-actions">
+              <button type="submit" class="btn-primary">Generate & Save into Registry</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <!-- Initial Space Flyby Intro Banner (Dismissible) -->
     <div id="intro-toast" class="intro-toast">
       <div class="intro-icon">🛰️</div>
@@ -340,6 +631,6 @@
   <!-- MapLibre GL JS -->
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <!-- Application JS -->
-  <script src="assets/js/app.js?v=2"></script>
+  <script src="assets/js/app.js?v=3"></script>
 </body>
 </html>
