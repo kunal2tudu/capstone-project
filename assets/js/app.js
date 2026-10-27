@@ -46,7 +46,8 @@ let activeLocationMarker = null;
 const cadastralData = {
   type: 'FeatureCollection',
   features: [
-    // --- JHARKHAND (East Singhbhum / Jamshedpur) ---
+    // --- JHARKHAND (East Singhbhum / Jamshedpur Showcase - Sundernagar Mouza) ---
+    // Mapped precisely to physical satellite features: Industrial campus, Highway corridor, Khets, Abadi & Reserve
     {
       type: 'Feature',
       id: 1,
@@ -55,28 +56,37 @@ const cadastralData = {
         survey_no: '104/1',
         owner: 'Sardar Gurpreet Singh & Brothers',
         coowners: '2 Co-Sharers (Equal 50% Share)',
-        area_sqm: '6,450 m² (1.59 Acres)',
+        area_sqm: '14,850 m² (3.67 Acres)',
         village: 'Sundernagar',
         district: 'East Singhbhum',
         state: 'Jharkhand',
         landuse: 'Industrial',
         zoning: 'Industrial Belt (IND-2)',
         status: 'verified',
-        height: 28,
+        height: 26,
         color: '#38bdf8',
         tax_status: 'Cleared (Receipt #TX-88219)',
-        permit: 'Approved: BP-2023-7410 (Factory Shed)',
+        permit: 'Approved: BP-2023-7410 (Factory Sheds & Yard)',
         far: '1.75 / 2.0 (Compliant)',
-        deed: 'DEED-2018-0912 (Registered)',
+        deed: 'DEED-2018-0912 (Registered Conveyance)',
         mortgage: 'Lien: Punjab National Bank (₹65,00,000)',
         mutation: '04-Oct-2022 (7/12 RoR Mutation Verified)',
-        ai_change: 'No unauthorized structures detected',
-        ai_permit: 'Compliant with Approved Plan',
-        ai_risk: 'Low (0.09) - Beyond Hazard Buffers'
+        ai_change: 'Structural footprint matches approved factory shed plan',
+        ai_permit: 'Compliant with Approved Municipal Sanction',
+        ai_risk: 'Low (0.09) - Clear of Hazard Buffers'
       },
       geometry: {
         type: 'Polygon',
-        coordinates: [[[86.1908, 22.7275], [86.1922, 22.7278], [86.1925, 22.7266], [86.1911, 22.7263], [86.1908, 22.7275]]]
+        // Traces the actual industrial manufacturing plant compound, perimeter wall & internal access yard
+        coordinates: [[
+          [86.1875, 22.7262],
+          [86.1905, 22.7266],
+          [86.1912, 22.7252],
+          [86.1910, 22.7235],
+          [86.1882, 22.7232],
+          [86.1870, 22.7245],
+          [86.1875, 22.7262]
+        ]]
       }
     },
     {
@@ -87,28 +97,35 @@ const cadastralData = {
         survey_no: '104/2-B',
         owner: 'Sunita Devi Murmu',
         coowners: 'Sole Proprietor',
-        area_sqm: '4,120 m² (1.02 Acres)',
+        area_sqm: '6,240 m² (1.54 Acres)',
         village: 'Sundernagar',
         district: 'East Singhbhum',
         state: 'Jharkhand',
         landuse: 'Commercial',
         zoning: 'Commercial Mixed (C-1)',
         status: 'verified',
-        height: 38,
+        height: 34,
         color: '#10b981',
         tax_status: 'Cleared (Receipt #TX-99014)',
-        permit: 'Approved: BP-2024-1188 (Commercial G+3)',
+        permit: 'Approved: BP-2024-1188 (Highway Commercial G+3)',
         far: '2.10 / 2.25 (Compliant)',
         deed: 'DEED-2021-3482 (Registered)',
-        mortgage: 'None (Clean Title)',
-        mutation: '19-Jan-2024 (Regular Mutation)',
-        ai_change: 'Construction progress matches declared phase',
-        ai_permit: 'Height within 15m municipal limit',
-        ai_risk: 'Low (0.14) - Safe Zone'
+        mortgage: 'None (Clean Commercial Title)',
+        mutation: '19-Jan-2024 (Regular Mutation Verified)',
+        ai_change: 'Construction progress matches declared commercial phase',
+        ai_permit: 'Height within 15m municipal zoning limit',
+        ai_risk: 'Low (0.14) - Safe Highway Setback Compliant'
       },
       geometry: {
         type: 'Polygon',
-        coordinates: [[[86.1925, 22.7278], [86.1942, 22.7281], [86.1946, 22.7269], [86.1928, 22.7266], [86.1925, 22.7278]]]
+        // Fronts the curving western verge of the Tata-Hata Road
+        coordinates: [[
+          [86.1942, 22.7285],
+          [86.1965, 22.7282],
+          [86.1958, 22.7265],
+          [86.1935, 22.7268],
+          [86.1942, 22.7285]
+        ]]
       }
     },
     {
@@ -126,21 +143,28 @@ const cadastralData = {
         landuse: 'Agricultural',
         zoning: 'Agricultural Buffer Zone (A-2)',
         status: 'unauthorized_alert',
-        height: 22,
+        height: 20,
         color: '#f43f5e',
-        tax_status: 'Overdue Notice Served (₹38,400)',
-        permit: 'DENIED / NO VALID SANCTION',
+        tax_status: 'Overdue Notice Served (₹38,400 Penal Assessment)',
+        permit: 'DENIED / NO VALID MUNICIPAL SANCTION',
         far: 'Unregulated Encroachment',
-        deed: 'DEED-2019-1144',
-        mortgage: 'Under Dispute / Court Stay Order',
-        mutation: 'Flagged by Land Revenue Officer',
+        deed: 'DEED-2019-1144 (Agricultural Only)',
+        mortgage: 'Under Dispute / Revenue Court Stay Order',
+        mutation: 'Flagged by Land Revenue Officer (LRO)',
         ai_change: 'CRITICAL ALERT: 850m² concrete shed detected without building permit!',
-        ai_permit: 'Cross-check failed: No approval on record',
+        ai_permit: 'Cross-check failed: No approval on record for Commercial use',
         ai_risk: 'High (0.87) - Agricultural Zone Encroachment'
       },
       geometry: {
         type: 'Polygon',
-        coordinates: [[[86.1911, 22.7263], [86.1928, 22.7266], [86.1931, 22.7252], [86.1913, 22.7249], [86.1911, 22.7263]]]
+        // Traces the agricultural parcel where unapproved commercial warehouse structure encroaches
+        coordinates: [[
+          [86.1918, 22.7265],
+          [86.1935, 22.7268],
+          [86.1940, 22.7250],
+          [86.1922, 22.7248],
+          [86.1918, 22.7265]
+        ]]
       }
     },
     {
@@ -151,7 +175,7 @@ const cadastralData = {
         survey_no: '106/1',
         owner: 'Manoj Kumar Mahto',
         coowners: 'Joint Family Title',
-        area_sqm: '8,900 m² (2.20 Acres)',
+        area_sqm: '13,500 m² (3.34 Acres)',
         village: 'Sundernagar',
         district: 'East Singhbhum',
         state: 'Jharkhand',
@@ -161,18 +185,26 @@ const cadastralData = {
         height: 5,
         color: '#84cc16',
         tax_status: 'Exempt (Agricultural RoR)',
-        permit: 'Exempt / Farmhouse eligible',
+        permit: 'Exempt / Farmhouse Eligible',
         far: 'N/A',
         deed: 'Inheritance RoR (7/12 Register)',
         mortgage: 'Kisan Credit Card (SBI: ₹2,50,000)',
         mutation: '11-Aug-2020 (Heir Succession Confirmed)',
-        ai_change: 'Crop pattern regular; active cultivation verified',
+        ai_change: 'Crop pattern regular; active paddy cultivation verified',
         ai_permit: 'No unauthorized structures detected',
-        ai_risk: 'Low (0.05) - Stable Soil Profile'
+        ai_risk: 'Low (0.05) - Stable Agricultural Soil Profile'
       },
       geometry: {
         type: 'Polygon',
-        coordinates: [[[86.1928, 22.7266], [86.1946, 22.7269], [86.1950, 22.7254], [86.1931, 22.7252], [86.1928, 22.7266]]]
+        // Traces the real earthen bunds (aars), farm pond, and cultivated khets east of the highway
+        coordinates: [[
+          [86.1948, 22.7248],
+          [86.1975, 22.7255],
+          [86.1982, 22.7235],
+          [86.1955, 22.7230],
+          [86.1945, 22.7238],
+          [86.1948, 22.7248]
+        ]]
       }
     },
     {
@@ -183,7 +215,7 @@ const cadastralData = {
         survey_no: '107/3',
         owner: 'Jharkhand State Industrial Dev Corp (JSIDC)',
         coowners: 'Government Allotment',
-        area_sqm: '18,500 m² (4.57 Acres)',
+        area_sqm: '16,800 m² (4.15 Acres)',
         village: 'Sundernagar',
         district: 'East Singhbhum',
         state: 'Jharkhand',
@@ -194,17 +226,24 @@ const cadastralData = {
         color: '#6366f1',
         tax_status: 'Government Property (Exempt)',
         permit: 'State Cabinet Approval #GC-441',
-        far: '2.50 (Substation & Water Treatment)',
+        far: '2.50 (Water Sump & Substation Facility)',
         deed: 'Govt Gazette Notification 2017',
         mortgage: 'None (State Asset)',
         mutation: 'Permanent Government Vesting',
-        ai_change: 'Boundary wall and access road detected',
+        ai_change: 'Boundary wall and access road detected; matches public works records',
         ai_permit: 'Approved state utility project',
         ai_risk: 'Zero Risk'
       },
       geometry: {
         type: 'Polygon',
-        coordinates: [[[86.1942, 22.7281], [86.1965, 22.7285], [86.1970, 22.7267], [86.1946, 22.7269], [86.1942, 22.7281]]]
+        // Traces the municipal water works, pumping facility & electrical utility yard
+        coordinates: [[
+          [86.1895, 22.7232],
+          [86.1922, 22.7235],
+          [86.1925, 22.7218],
+          [86.1898, 22.7215],
+          [86.1895, 22.7232]
+        ]]
       }
     },
     {
@@ -215,7 +254,7 @@ const cadastralData = {
         survey_no: '108/P',
         owner: 'Pradeep Verma & Anr.',
         coowners: 'Under Partition Litigation',
-        area_sqm: '5,300 m² (1.31 Acres)',
+        area_sqm: '7,800 m² (1.93 Acres)',
         village: 'Sundernagar',
         district: 'East Singhbhum',
         state: 'Jharkhand',
@@ -230,13 +269,20 @@ const cadastralData = {
         deed: 'DEED-2016-0819',
         mortgage: 'Title In Dispute (Civil Suit #412/2023)',
         mutation: 'Contested in SDM Revenue Court',
-        ai_change: 'Partial excavation detected',
-        ai_permit: 'Alert: Work on disputed parcel stopped by notice',
+        ai_change: 'Partial excavation detected; flagged against injunction notice',
+        ai_permit: 'Alert: Work on disputed parcel halted by revenue officer',
         ai_risk: 'Moderate (0.64) - Legal Injunction Active'
       },
       geometry: {
         type: 'Polygon',
-        coordinates: [[[86.1946, 22.7269], [86.1970, 22.7267], [86.1974, 22.7252], [86.1950, 22.7254], [86.1946, 22.7269]]]
+        // Traces the rural settlement abadi cluster with ancestral courtyard homes & village lanes
+        coordinates: [[
+          [86.1965, 22.7285],
+          [86.1988, 22.7290],
+          [86.1992, 22.7270],
+          [86.1968, 22.7268],
+          [86.1965, 22.7285]
+        ]]
       }
     },
     {
@@ -247,28 +293,36 @@ const cadastralData = {
         survey_no: '109/2',
         owner: 'Forest Department, Gov of Jharkhand',
         coowners: 'Protected Eco-Reserve',
-        area_sqm: '24,000 m² (5.93 Acres)',
+        area_sqm: '28,500 m² (7.04 Acres)',
         village: 'Sundernagar',
         district: 'East Singhbhum',
         state: 'Jharkhand',
         landuse: 'Forest',
         zoning: 'Eco-Sensitive Forest Zone (ENV-1)',
         status: 'government',
-        height: 2,
+        height: 4,
         color: '#059669',
         tax_status: 'Exempt',
         permit: 'Strict No-Construction Zone',
         far: '0.00',
-        deed: 'Indian Forest Act Reserved Forest',
+        deed: 'Indian Forest Act Reserved Forest Notification',
         mortgage: 'Inalienable State Asset',
         mutation: 'Protected Green Cover Record',
-        ai_change: 'Sentinel-2 NDVI confirms dense canopy; no deforestation',
+        ai_change: 'Sentinel-2 NDVI confirms dense canopy; no deforestation detected',
         ai_permit: 'Clear from encroachments',
         ai_risk: 'Zero Risk'
       },
       geometry: {
         type: 'Polygon',
-        coordinates: [[[86.1895, 22.7280], [86.1908, 22.7275], [86.1911, 22.7249], [86.1898, 22.7252], [86.1895, 22.7280]]]
+        // Traces the dense tree canopy edge and natural ridgeline slope along the western hill
+        coordinates: [[
+          [86.1868, 22.7288],
+          [86.1895, 22.7282],
+          [86.1902, 22.7266],
+          [86.1875, 22.7262],
+          [86.1862, 22.7275],
+          [86.1868, 22.7288]
+        ]]
       }
     },
 
@@ -544,24 +598,45 @@ const cadastralData = {
   ]
 };
 
-// Utilities & Linear Corridors
+// Utilities & Linear Corridors (Statutory Right-of-Way & Transmission Buffers)
 const utilitiesData = {
   type: 'FeatureCollection',
   features: [
     {
       type: 'Feature',
-      properties: { name: 'NH-33 / Tata-Hata Road Corridor', type: 'Highway', buffer: '30m Setback' },
+      properties: {
+        name: 'NH-33 / Tata-Hata Road Corridor',
+        type: 'National / State Highway',
+        buffer: '30m Statutory Building Setback'
+      },
       geometry: {
         type: 'LineString',
-        coordinates: [[86.1885, 22.7288], [86.1910, 22.7279], [86.1940, 22.7272], [86.1980, 22.7262]]
+        // Follows the actual curvature of the paved Tata-Hata Road visible on satellite
+        coordinates: [
+          [86.1985, 22.7305],
+          [86.1970, 22.7288],
+          [86.1958, 22.7265],
+          [86.1948, 22.7242],
+          [86.1940, 22.7218]
+        ]
       }
     },
     {
       type: 'Feature',
-      properties: { name: '132kV High Tension Power Line', type: 'Utility', buffer: '15m Safe Corridor' },
+      properties: {
+        name: '132kV High Tension Power Transmission Grid',
+        type: 'CEA Utility Easement',
+        buffer: '15m Hazardous Clearance Safe Corridor'
+      },
       geometry: {
         type: 'LineString',
-        coordinates: [[86.1900, 22.7245], [86.1930, 22.7258], [86.1965, 22.7270]]
+        // Traces the regional power transmission line clearance swath
+        coordinates: [
+          [86.1875, 22.7300],
+          [86.1915, 22.7275],
+          [86.1955, 22.7252],
+          [86.1988, 22.7225]
+        ]
       }
     }
   ]
@@ -782,7 +857,22 @@ function addCadastralLayers() {
     });
   }
 
-  // 5. Utilities & Road Buffers
+  // 5. Encumbered / Disputed Parcels Warning Outline
+  if (!map.getLayer('parcels-dispute-stroke')) {
+    map.addLayer({
+      id: 'parcels-dispute-stroke',
+      type: 'line',
+      source: 'cadastral-parcels',
+      filter: ['==', ['get', 'status'], 'disputed'],
+      paint: {
+        'line-color': '#c084fc',
+        'line-width': 4.0,
+        'line-dasharray': [3, 2]
+      }
+    });
+  }
+
+  // 6. Utilities & Road Buffers
   if (!map.getLayer('utilities-layer')) {
     map.addLayer({
       id: 'utilities-layer',
@@ -818,8 +908,8 @@ function setupMapInteractions() {
       const statusBadge = feat.status === 'unauthorized_alert'
         ? '<span class="popup-badge danger">AI ALERT: Unauthorized Construction</span>'
         : (feat.status === 'disputed'
-            ? '<span class="popup-badge danger">Civil Court Injunction</span>'
-            : '<span class="popup-badge success">Bhu-Aadhaar Verified</span>');
+          ? '<span class="popup-badge danger">Civil Court Injunction</span>'
+          : '<span class="popup-badge success">Bhu-Aadhaar Verified</span>');
 
       hoverPopup.setLngLat(coords).setHTML(`
         <div class="popup-title">${feat.ulpin}</div>
@@ -855,11 +945,27 @@ function setupMapInteractions() {
 }
 
 /**
- * Handle ground click anywhere on the map in India:
+ * Validate if a geographic coordinate falls within the sovereign territory of the Republic of India
+ * Geographic bounding envelope of India:
+ * Longitude: 68.0° E to 97.5° E
+ * Latitude: 6.5° N to 37.5° N
+ */
+function isLocationInIndia(lng, lat, countryCode = null) {
+  if (countryCode && countryCode.toLowerCase() !== 'in') {
+    return false;
+  }
+  if (lng < 68.0 || lng > 97.5 || lat < 6.5 || lat > 37.5) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Handle ground click anywhere on the map:
  * - Drops animated marker
- * - Fetches real-time reverse geocoding via OpenStreetMap Nominatim
- * - Computes official 14-digit Bhu-Aadhaar ULPIN
- * - Opens Location Intelligence card
+ * - Validates whether the clicked point is within Indian sovereign territory
+ * - If inside India: Fetches administrative tier, computes official 14-char Bhu-Aadhaar ULPIN
+ * - If outside India: Informs user that Bhu-Aadhaar/DILRMP applies exclusively to the Republic of India
  */
 async function handleMapGroundClick(lngLat) {
   const { lng, lat } = lngLat;
@@ -867,7 +973,7 @@ async function handleMapGroundClick(lngLat) {
 
   // Place or move 3D Location Marker
   if (activeLocationMarker) activeLocationMarker.remove();
-  
+
   const el = document.createElement('div');
   el.className = 'location-drop-marker';
   el.innerHTML = `
@@ -878,16 +984,18 @@ async function handleMapGroundClick(lngLat) {
   // Close parcel inspector if open
   document.getElementById('parcel-inspector').classList.add('closed');
 
-  // Compute standard 14-digit ULPIN for this coordinate
-  const computedUlpin = generateStandardULPIN(lng, lat);
-  document.getElementById('loc-computed-ulpin').textContent = computedUlpin;
+  // Pre-check coordinates
+  const inIndiaCoords = isLocationInIndia(lng, lat);
+  const drawerTag = document.querySelector('#location-inspector .drawer-tag');
+  const btnRegister = document.getElementById('btn-loc-register');
+
   document.getElementById('loc-coords').textContent = `${lng.toFixed(5)}° E, ${lat.toFixed(5)}° N`;
-  document.getElementById('loc-name').textContent = 'Fetching place details...';
+  document.getElementById('loc-name').textContent = 'Resolving spatial boundaries...';
   document.getElementById('loc-village').textContent = 'Querying GIS database...';
   document.getElementById('loc-tehsil').textContent = 'Resolving administrative tier...';
-  document.getElementById('loc-district-state').textContent = 'India SDI...';
+  document.getElementById('loc-district-state').textContent = 'Spatial Data Infrastructure...';
   document.getElementById('loc-pincode').textContent = '...';
-  document.getElementById('loc-elevation').textContent = `~${Math.round(200 + Math.sin(lat) * 150)} m MSL`;
+  document.getElementById('loc-elevation').textContent = `~${Math.round(150 + Math.abs(Math.sin(lat) * 250))} m MSL`;
 
   // Open Location Drawer
   const locDrawer = document.getElementById('location-inspector');
@@ -901,30 +1009,122 @@ async function handleMapGroundClick(lngLat) {
     if (res.ok) {
       const data = await res.json();
       const addr = data.address || {};
-      const placeName = data.name || addr.suburb || addr.village || addr.town || addr.city || 'Survey Cadastre Zone';
-      const tehsil = addr.county || addr.state_district || addr.suburb || 'Sub-Division';
-      const state = addr.state || 'India';
-      const district = addr.state_district || addr.city || addr.county || 'District';
-      const pincode = addr.postcode || 'PIN N/A';
+      const countryCode = (addr.country_code || '').toLowerCase();
+      const country = addr.country || (inIndiaCoords ? 'India' : 'International');
+      const isInIndia = isLocationInIndia(lng, lat, countryCode);
 
-      document.getElementById('loc-name').textContent = placeName;
-      document.getElementById('loc-village').textContent = placeName;
-      document.getElementById('loc-tehsil').textContent = tehsil;
-      document.getElementById('loc-district-state').textContent = `${district}, ${state}`;
-      document.getElementById('loc-pincode').textContent = pincode;
-      document.getElementById('loc-main-title').textContent = `${placeName}, ${state}`;
-      document.getElementById('loc-sub-title').textContent = `PIN: ${pincode} • WGS84 Centroid: [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
+      if (!isInIndia) {
+        // NON-INDIAN LOCATION (e.g. Aral Sea, Kazakhstan / Central Asia)
+        renderNonIndianLocationDisplay(lng, lat, data, addr, country);
+        return;
+      }
 
-      currentInspectedLocation.placeName = placeName;
-      currentInspectedLocation.state = state;
-      currentInspectedLocation.district = district;
-      currentInspectedLocation.ulpin = computedUlpin;
+      // VALID INDIAN TERRITORY
+      renderIndianLocationDisplay(lng, lat, data, addr);
     } else {
-      fallbackLocationDisplay(lng, lat, computedUlpin);
+      if (!inIndiaCoords) {
+        renderNonIndianLocationDisplay(lng, lat, null, {}, 'International Territory');
+      } else {
+        fallbackLocationDisplay(lng, lat, generateStandardULPIN(lng, lat));
+      }
     }
   } catch (err) {
-    fallbackLocationDisplay(lng, lat, computedUlpin);
+    if (!inIndiaCoords) {
+      renderNonIndianLocationDisplay(lng, lat, null, {}, 'International Territory');
+    } else {
+      fallbackLocationDisplay(lng, lat, generateStandardULPIN(lng, lat));
+    }
   }
+}
+
+/**
+ * Render non-Indian location (Outside Republic of India sovereign jurisdiction)
+ */
+function renderNonIndianLocationDisplay(lng, lat, data, addr, country) {
+  const drawerTag = document.querySelector('#location-inspector .drawer-tag');
+  if (drawerTag) drawerTag.textContent = 'INTERNATIONAL TERRITORY (NON-INDIAN JURISDICTION)';
+
+  const placeName = (data && data.name) || addr.natural || addr.suburb || addr.village || addr.city || 'Non-Indian Zone';
+  const region = addr.state || addr.county || 'International Region';
+  const countryName = country || 'Foreign Sovereign State';
+
+  document.getElementById('loc-name').textContent = placeName;
+  document.getElementById('loc-village').textContent = placeName;
+  document.getElementById('loc-tehsil').textContent = addr.county || 'Foreign Administrative Division';
+  document.getElementById('loc-district-state').textContent = `${region}, ${countryName}`;
+  document.getElementById('loc-pincode').textContent = addr.postcode || 'N/A (Non-Indian)';
+  document.getElementById('loc-main-title').textContent = `${placeName}, ${countryName}`;
+  document.getElementById('loc-sub-title').innerHTML = `
+    <span style="color:#ef4444;font-weight:600;">⚠️ Outside Sovereign Republic of India:</span> 
+    Coordinates fall in <strong>${countryName}</strong>. Bhu-Aadhaar (ULPIN) / DILRMP DPI is not applicable here.
+  `;
+
+  // Do NOT generate a Bhu-Aadhaar ULPIN for foreign territories!
+  document.getElementById('loc-computed-ulpin').innerHTML = `
+    <span style="color:#f43f5e;font-size:15px;letter-spacing:0.5px;font-weight:700;">N/A — OUTSIDE INDIAN JURISDICTION</span>
+  `;
+
+  const explEl = document.querySelector('#location-inspector .computed-expl');
+  if (explEl) {
+    explEl.innerHTML = `
+      <strong>Jurisdiction Notice:</strong> Bhu-Aadhaar (14-digit ULPIN) is established exclusively under the 
+      <strong>Digital India Land Records Modernization Programme (DILRMP)</strong> by the Ministry of Rural Development, 
+      Government of India. It applies solely to parcels within the sovereign boundaries of India.
+    `;
+  }
+
+  // Hide or disable the "Register into Indian ULPIN Directory" button
+  const btnRegister = document.getElementById('btn-loc-register');
+  if (btnRegister) {
+    btnRegister.style.display = 'none';
+  }
+
+  currentInspectedLocation.placeName = placeName;
+  currentInspectedLocation.state = region;
+  currentInspectedLocation.district = countryName;
+  currentInspectedLocation.ulpin = null;
+  currentInspectedLocation.isNonIndian = true;
+}
+
+/**
+ * Render valid Indian location
+ */
+function renderIndianLocationDisplay(lng, lat, data, addr) {
+  const drawerTag = document.querySelector('#location-inspector .drawer-tag');
+  if (drawerTag) drawerTag.textContent = 'INDIA SPATIAL INTELLIGENCE';
+
+  const placeName = data.name || addr.suburb || addr.village || addr.town || addr.city || 'Survey Cadastre Zone';
+  const tehsil = addr.county || addr.state_district || addr.suburb || 'Sub-Division / Taluk';
+  const state = addr.state || 'India';
+  const district = addr.state_district || addr.city || addr.county || 'District';
+  const pincode = addr.postcode || 'PIN N/A';
+  const computedUlpin = generateStandardULPIN(lng, lat);
+
+  document.getElementById('loc-name').textContent = placeName;
+  document.getElementById('loc-village').textContent = placeName;
+  document.getElementById('loc-tehsil').textContent = tehsil;
+  document.getElementById('loc-district-state').textContent = `${district}, ${state}`;
+  document.getElementById('loc-pincode').textContent = pincode;
+  document.getElementById('loc-main-title').textContent = `${placeName}, ${state}`;
+  document.getElementById('loc-sub-title').textContent = `PIN: ${pincode} • WGS84 Centroid: [${lng.toFixed(4)}, ${lat.toFixed(4)}]`;
+
+  document.getElementById('loc-computed-ulpin').textContent = computedUlpin;
+  const explEl = document.querySelector('#location-inspector .computed-expl');
+  if (explEl) {
+    explEl.textContent = 'Derived from 14-character geocoded bounding box centroid coordinates complying with Digital India Land Records Modernization Programme (DILRMP).';
+  }
+
+  // Ensure Register button is enabled for Indian territory
+  const btnRegister = document.getElementById('btn-loc-register');
+  if (btnRegister) {
+    btnRegister.style.display = 'inline-flex';
+  }
+
+  currentInspectedLocation.placeName = placeName;
+  currentInspectedLocation.state = state;
+  currentInspectedLocation.district = district;
+  currentInspectedLocation.ulpin = computedUlpin;
+  currentInspectedLocation.isNonIndian = false;
 }
 
 function fallbackLocationDisplay(lng, lat, computedUlpin) {
@@ -941,6 +1141,7 @@ function fallbackLocationDisplay(lng, lat, computedUlpin) {
   currentInspectedLocation.state = estState.state;
   currentInspectedLocation.district = estState.district;
   currentInspectedLocation.ulpin = computedUlpin;
+  currentInspectedLocation.isNonIndian = false;
 }
 
 /**
@@ -961,8 +1162,12 @@ function estimateIndianState(lng, lat) {
 /**
  * Generate official DoLR-compliant 14-character Bhu-Aadhaar ULPIN
  * Structure: IN-{StateCode}-{CentroidLongPart}-{CentroidLatPart}-{RandomHash}
+ * Only valid for coordinates within the sovereign territory of India!
  */
 function generateStandardULPIN(lng, lat) {
+  if (!isLocationInIndia(lng, lat)) {
+    return 'N/A (Non-Indian Territory)';
+  }
   const state = estimateIndianState(lng, lat);
   const codeMap = {
     'Maharashtra': 'MH', 'Jharkhand': 'JH', 'Karnataka': 'KA',
@@ -1077,7 +1282,7 @@ function getFeatureCenter(feature) {
 function startEarthFlyIn(targetCoords = null, targetZoom = 16.5, targetPitch = 62, targetBearing = 38) {
   // Determine target coordinates
   let destination = targetCoords;
-  
+
   if (!destination) {
     if (selectedParcelId) {
       const feat = cadastralData.features.find(f => f.id === selectedParcelId);
@@ -1150,11 +1355,11 @@ function renderRegistryTable() {
     if (landuseFilter && p.landuse !== landuseFilter) return false;
     if (keyword) {
       const match = p.ulpin.toLowerCase().includes(keyword) ||
-                    p.owner.toLowerCase().includes(keyword) ||
-                    p.survey_no.toLowerCase().includes(keyword) ||
-                    p.village.toLowerCase().includes(keyword) ||
-                    p.district.toLowerCase().includes(keyword) ||
-                    (p.state && p.state.toLowerCase().includes(keyword));
+        p.owner.toLowerCase().includes(keyword) ||
+        p.survey_no.toLowerCase().includes(keyword) ||
+        p.village.toLowerCase().includes(keyword) ||
+        p.district.toLowerCase().includes(keyword) ||
+        (p.state && p.state.toLowerCase().includes(keyword));
       if (!match) return false;
     }
     return true;
@@ -1189,10 +1394,10 @@ function renderRegistryTable() {
     const statusPill = p.status === 'unauthorized_alert'
       ? '<span class="status-pill alert">AI Alert</span>'
       : (p.status === 'disputed'
-          ? '<span class="status-pill disputed">Court Dispute</span>'
-          : (p.status === 'government'
-              ? '<span class="status-pill government">Govt Asset</span>'
-              : '<span class="status-pill verified">Verified Title</span>'));
+        ? '<span class="status-pill disputed">Court Dispute</span>'
+        : (p.status === 'government'
+          ? '<span class="status-pill government">Govt Asset</span>'
+          : '<span class="status-pill verified">Verified Title</span>'));
 
     return `
       <tr data-id="${f.id}">
@@ -1219,7 +1424,7 @@ function renderRegistryTable() {
 }
 
 // Global functions for inline table button actions
-window.flyToRegistryParcel = function(featureId, coords) {
+window.flyToRegistryParcel = function (featureId, coords) {
   document.getElementById('ulpin-registry-modal').classList.add('hidden');
   const feat = cadastralData.features.find(f => f.id === featureId);
   if (feat) {
@@ -1231,7 +1436,7 @@ window.flyToRegistryParcel = function(featureId, coords) {
   }
 };
 
-window.openRegistryParcelDossier = function(featureId) {
+window.openRegistryParcelDossier = function (featureId) {
   document.getElementById('ulpin-registry-modal').classList.add('hidden');
   const feat = cadastralData.features.find(f => f.id === featureId);
   if (feat) {
@@ -1315,7 +1520,7 @@ function setupUIEventListeners() {
         tax_status: 'Newly Minted (Registration Cleared)',
         permit: 'Verified under Digital Public Infrastructure',
         far: '2.00',
-        deed: `DEED-${new Date().getFullYear()}-${Math.floor(Math.random()*9000+1000)}`,
+        deed: `DEED-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000 + 1000)}`,
         mortgage: 'None (Clean Title)',
         mutation: `${new Date().toLocaleDateString('en-GB')} (New Bhu-Aadhaar Entry)`,
         ai_change: 'Verified via high-res satellite baseline',
@@ -1453,6 +1658,11 @@ function setupUIEventListeners() {
     if (map.getLayer('utilities-layer')) map.setLayoutProperty('utilities-layer', 'visibility', val);
   });
 
+  document.getElementById('layer-disputes')?.addEventListener('change', (e) => {
+    const val = e.target.checked ? 'visible' : 'none';
+    if (map.getLayer('parcels-dispute-stroke')) map.setLayoutProperty('parcels-dispute-stroke', 'visibility', val);
+  });
+
   // Camera Presets
   document.querySelectorAll('.preset-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -1510,12 +1720,12 @@ function setupUIEventListeners() {
     const matches = cadastralData.features.filter(f => {
       const p = f.properties;
       return p.ulpin.toLowerCase().includes(q) ||
-             p.survey_no.toLowerCase().includes(q) ||
-             p.owner.toLowerCase().includes(q) ||
-             p.village.toLowerCase().includes(q) ||
-             p.district.toLowerCase().includes(q) ||
-             (p.state && p.state.toLowerCase().includes(q)) ||
-             p.landuse.toLowerCase().includes(q);
+        p.survey_no.toLowerCase().includes(q) ||
+        p.owner.toLowerCase().includes(q) ||
+        p.village.toLowerCase().includes(q) ||
+        p.district.toLowerCase().includes(q) ||
+        (p.state && p.state.toLowerCase().includes(q)) ||
+        p.landuse.toLowerCase().includes(q);
     });
 
     if (matches.length > 0) {
